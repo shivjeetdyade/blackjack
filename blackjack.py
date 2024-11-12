@@ -1,4 +1,5 @@
 from random import randint
+import time
 
 balance = 0
 bet_amount = 0
@@ -291,3 +292,6 @@ if input("want to deal?(y/n) ").lower() == 'y':
                                     break
 else:
     print("your deposit {coins} has been saved. Thank You")
+
+
+time.sleep(10)
