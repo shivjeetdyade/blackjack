@@ -1,13 +1,53 @@
 from random import randint
 import time
+import sqlite3
 
-user = {}
+# Path to the SQLite database file
+DB_FILE = "deposits.db"
+
+# Function to initialize the database
+def initialize_database():
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    # Create the table if it doesn't exist
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS user_deposits (
+        username TEXT PRIMARY KEY,
+        deposit INTEGER
+    )
+    """)
+    conn.commit()
+    conn.close()
+
+# Function to get the deposit for a specific user
+def get_user_deposit(username):
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    cursor.execute("SELECT deposit FROM user_deposits WHERE username = ?", (username,))
+    row = cursor.fetchone()
+    conn.close()
+    # Return the deposit if the user exists, otherwise return 0
+    return row[0] if row else 0
+
+# Function to update or insert the deposit for a specific user
+def update_user_deposit(username, deposit):
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    # Insert or update the deposit
+    cursor.execute("""
+    INSERT INTO user_deposits (username, deposit)
+    VALUES (?, ?)
+    ON CONFLICT(username) DO UPDATE SET deposit=excluded.deposit
+    """, (username, deposit))
+    conn.commit()
+    conn.close()
 
 print("Welcome To BLACKJACK ")
-
+initialize_database()
 username = input("enter your name:  ")
 
-deposit = user[username] = 0
+deposit = get_user_deposit(username)
+
 one_more_round = 'yes'
 
 while one_more_round == 'yes':
@@ -67,12 +107,7 @@ while one_more_round == 'yes':
                 total = total + cards[hands[player_hand]['cards'][j]]
         return total
 
-    if username not in user:
-        deposit = 0
-        print('Your deposit is', deposit,'Rupees')
-    else:
-        print('Your deposit is', deposit, 'Rupees')
-
+    print('Your deposit is', deposit, 'Rupees')
     deposit = deposit + int(input("enter number of coins to take: (1 coin equals 1 rupee) "))
     print('Your deposit is', deposit, 'Rupees')
 
@@ -126,8 +161,8 @@ while one_more_round == 'yes':
 
                         if input("Do you want to split?(yes/no) ").lower() == 'yes':
                             split(hand)
-                            print("your split cards:  ",hands[str(len(hands)-1)]['cards'],'your total:    ',player_total(str(len(hands)-1)))
-                            print("your split cards:  ",hands[str(len(hands)-2)]['cards'],'your total:    ',player_total(str(len(hands)-2)))
+                            print("your split cards:  ",hands[str(len(hands)-1)]['cards'],' and your total:    ',player_total(str(len(hands)-1)))
+                            print("your split cards:  ",hands[str(len(hands)-2)]['cards'],' and your total:    ',player_total(str(len(hands)-2)))
 
                         else:
                             reps = 4
@@ -318,10 +353,10 @@ while one_more_round == 'yes':
                                         break
 
         print('Your deposit is', deposit, 'Rupees')
-        user[username] = deposit
+        update_user_deposit(username, deposit)
         one_more_round = input("Take more coins or play_next_round?(yes/no)    ")
 
     else:
-        print("your deposit {coins} has been saved. Thank You")
+        print("your deposit", deposit, "has been saved. Thank You")
 
 time.sleep(5)
