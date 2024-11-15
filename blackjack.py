@@ -2,14 +2,11 @@ from random import randint
 import time
 import sqlite3
 
-
 DB_FILE = "deposits.db"
-
 
 def initialize_database():
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
-    
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS user_deposits (
         username TEXT PRIMARY KEY,
@@ -19,21 +16,17 @@ def initialize_database():
     conn.commit()
     conn.close()
 
-
 def get_user_deposit(username):
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     cursor.execute("SELECT deposit FROM user_deposits WHERE username = ?", (username,))
     row = cursor.fetchone()
     conn.close()
-    
     return row[0] if row else 0
-
 
 def update_user_deposit(username, deposit):
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
-    
     cursor.execute("""
     INSERT INTO user_deposits (username, deposit)
     VALUES (?, ?)
@@ -358,5 +351,6 @@ while one_more_round == 'yes':
 
     else:
         print("your deposit", deposit, "has been saved. Thank You")
+        one_more_round = 'no'
 
 time.sleep(5)
