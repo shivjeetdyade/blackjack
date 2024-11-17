@@ -34,8 +34,22 @@ def update_user_deposit(username, deposit):
     """, (username, deposit))
     conn.commit()
     conn.close()
+ 
+print(""" \n\n\n ♠   ♥   ♣   ♦   BLACKJACK   ♦   ♣   ♥   ♠ \n """)
+print(r"""  
+  ____  _            _     _            _    
+ | __ )| | __ _  ___| | __(_) __ _  ___| | __
+ |  _ \| |/ _` |/ __| |/ /| |/ _` |/ __| |/ /
+ | |_) | | (_| | (__|   < | | (_| | (__|   < 
+ |____/|_|\__,_|\___|_|\_\|_|\__,_|\___|_|\_\
 
-print("Welcome To BLACKJACK ")
+"""
+      )
+
+print()
+print()
+print()
+
 initialize_database()
 username = input("enter your name:  ")
 
