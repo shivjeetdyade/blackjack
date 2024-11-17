@@ -59,23 +59,20 @@ one_more_round = 'yes'
 
 while one_more_round == 'yes':
     bet_amount = 0
-    ace = 11
     reps = 0
 
     deck = ['ace','2','3','4','5','6','7','8','9','10','k','q','j']
     # deck = ['8','ace']
 
-    cards = {'ace':ace,'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'10':10,'k':10,'q':10,'j':10}
-    # cards = {'8':8,'ace':ace}
+    card = {'ace':11,'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'10':10,'k':10,'q':10,'j':10}
+    # card = {'8':8,'ace':11}
 
     hands = {
         'dealer_hand':{
-            'cards':[],
-            'ace_value':ace
+            'cards':[]
         },
         '1':{
-            'cards':[],
-            'ace_value':ace
+            'cards':[]
         }
     }
 
@@ -83,22 +80,18 @@ while one_more_round == 'yes':
         hands[player_hand]['cards'].append(deck[randint(0,len(deck)-1)])
 
     def set_ace(ace_value):
-        global ace
-        ace = ace_value
-        for hand in hands:
-            hands[hand]['ace_value'] = ace_value
-            cards['ace'] = ace_value
+        card['ace'] = ace_value
 
     def cards_match(player_hand):
         return hands[player_hand]['cards'][0] == hands[player_hand]['cards'][1]
 
     def split(player_hand):
+        global deposit
         new_hand = str(len(hands))
         hands[new_hand]={}
         hands[new_hand]['cards'] = [111]
         hands[new_hand]['cards'][0] = hands[player_hand]['cards'][0]
         gets_a_card(new_hand)
-        hands[new_hand]['ace_value'] = ace
         deposit = deposit - bet_amount
         hands[player_hand]['cards'][1] = deck[randint(0,len(deck)-1)]
 
@@ -106,12 +99,12 @@ while one_more_round == 'yes':
         total = 0
         set_ace(11)
         for i in range(len(hands[player_hand]['cards'])):
-            total = total + cards[hands[player_hand]['cards'][i]]
+            total = total + card[hands[player_hand]['cards'][i]]
         if total > 21:
             set_ace(1)
             total = 0
             for j in range(len(hands[player_hand]['cards'])):
-                total = total + cards[hands[player_hand]['cards'][j]]
+                total = total + card[hands[player_hand]['cards'][j]]
         return total
 
     print('Your deposit is', deposit, 'Rupees')
@@ -140,10 +133,8 @@ while one_more_round == 'yes':
         gets_a_card('1')
         gets_a_card('1')
 
-        set_ace(11)
-
         user_total = player_total('1')
-        print("dealer cards: ",hands['dealer_hand']['cards'][0],'and Hidden card'," , dealer total: ",cards[hands['dealer_hand']['cards'][0]],'+ Hidden')
+        print("dealer cards: ",hands['dealer_hand']['cards'][0],'and Hidden card'," , dealer total: ",card[hands['dealer_hand']['cards'][0]],'+ Hidden')
         print("your cards:  ",hands['1']['cards'],', your total:    ',user_total)
 
         if player_total('dealer_hand') == 21 and user_total == 21:
@@ -187,11 +178,11 @@ while one_more_round == 'yes':
                     while not player_total(hand) >= 21:
                         print('your_total',player_total(hand))
 
-                        if hits>0:
-                            action = input("select one of the following option: \n \n hit \n stand \n \n ").strip().lower()
-
-                        elif hits == 0:
+                        if hits == 0 and (deposit - bet_amount) >= 0:
                             action = input("select one of the following option: \n \n hit \n stand \n double \n \n ").strip().lower()
+
+                        else:
+                            action = input("select one of the following option: \n \n hit \n stand \n \n ").strip().lower()
 
                         if action == 'hit':
                             hits = hits + 1
@@ -203,12 +194,12 @@ while one_more_round == 'yes':
                                 deposit = deposit + 2 * bet_amount
                                 break
 
-                        elif action == 'double' and hits == 0:
+                        elif action == 'double' and hits == 0 and (deposit - bet_amount) >= 0:
+                            hits += 1
                             deposit = deposit - bet_amount
+                            print("your deposit is",deposit)
                             gets_a_card(hand)
                             print('your cards',hands[hand]['cards'] ,'Your total',player_total(hand))
-                            set_ace(11)
-                            print("dealer cards: ",hands['dealer_hand']['cards'],'dealer total: ',player_total('dealer_hand'))
 
                             if player_total(hand) == 21:
                                 print("dealer cards: ",hands['dealer_hand']['cards'],'dealer total: ',player_total('dealer_hand'),'\n You win')
@@ -216,56 +207,33 @@ while one_more_round == 'yes':
                                 break
 
                             elif player_total(hand) > 21:
+                                print("dealer cards: ",hands['dealer_hand']['cards'],'dealer total: ',player_total('dealer_hand'),'\n your cards:',hands[hand]['cards'],'and your total is',player_total(hand),' \n Bust \n You lose')
+                                break
 
-                                if 'ace' not in hands[hand]['cards'] or ('ace' in hands[hand]['cards'] and ace == 1):
-                                    print("dealer cards: ",hands['dealer_hand']['cards'],'dealer total: ',player_total('dealer_hand'),'\n your cards:',hands[hand]['cards'],'and your total is',player_total(hand),' \n Bust \n You lose')
-                                    break
+                            while player_total('dealer_hand') < 17:
+                                print("dealer cards: ",hands['dealer_hand']['cards'],"dealer_total",player_total('dealer_hand'))
+                                gets_a_card('dealer_hand')
+                                print("dealer cards: ",hands['dealer_hand']['cards'],"dealer_total",player_total('dealer_hand'))
 
-                                else:
-                                    set_ace(1)
-                                    if player_total(hand) == 21:
-                                        print("dealer cards: ",hands['dealer_hand']['cards'],'dealer total: ',player_total('dealer_hand'),'\n You win')
-                                        deposit = deposit + 4 * bet_amount
-                                        break
+                            if not player_total('dealer_hand') > 21 and not player_total(hand) > player_total('dealer_hand'): 
+                                print("dealer cards: ",hands['dealer_hand']['cards'],"dealer_total",player_total('dealer_hand'))
+                                print('You lose!!!')
+                                break
 
-                                    while player_total('dealer_hand') < 17:
-                                        print("dealer cards: ",hands['dealer_hand']['cards'],"dealer_total",player_total('dealer_hand'))
-                                        gets_a_card('dealer_hand')
-                                        print("dealer cards: ",hands['dealer_hand']['cards'],"dealer_total",player_total('dealer_hand'))
+                            elif (not player_total('dealer_hand') > 21 and player_total(hand) > player_total('dealer_hand')) or (player_total('dealer_hand') > 21):
+                                print('You won!!!')
+                                deposit = deposit + 4 * bet_amount
+                                break
 
-                                    if not player_total('dealer_hand') > 21 and not player_total(hand) > player_total('dealer_hand'): 
-                                        print('You lose!!!')
-                                        break
+                            elif player_total('dealer_hand') == 21:
+                                print('You lose!!!')
+                                break
 
-                                    elif (not player_total('dealer_hand') > 21 and player_total(hand) > player_total('dealer_hand')) or (player_total('dealer_hand') > 21 and not 'ace' in hands['dealer_hand']['cards']) or (player_total('dealer_hand') > 21 and 'ace' in hands['dealer_hand']['cards'] and ace == 1):
-                                        print('You won!!!')
-                                        deposit = deposit + 4 * bet_amount
-                                        break
-
-                                    elif player_total('dealer_hand') > 21 and 'ace' in hands['dealer_hand']['cards'] and ace != 1:
-                                        set_ace(1)
-
-                                        while player_total('dealer_hand') < 17:
-                                            gets_a_card('dealer_hand')
-                                            print("dealer cards: ",hands['dealer_hand']['cards'],"dealer_total",player_total('dealer_hand'))
-
-                                        if not player_total('dealer_hand') > 21 and not player_total(hand) > player_total('dealer_hand'):
-                                            print('your cards', hands[hand]['cards'] ,'Your total',player_total(hand))
-                                            print('You lose!!!')
-                                            break
-
-                                        elif (not player_total('dealer_hand') > 21 and player_total(hand) > player_total('dealer_hand')) or (player_total('dealer_hand') > 21 ):
-                                            print('your cards',hands[hand]['cards'] ,'Your total',player_total(hand))
-                                            print('You won!!!')
-                                            deposit = deposit + 4 * bet_amount
-                                            break
-
-                                        elif player_total('dealer_hand') == 21:
-                                            print('You lose!!!')
-                                            break
+                            elif player_total('dealer_hand') == player_total(hand):
+                                print("Push")
+                                break
 
                         elif action == 'stand':
-                            set_ace(11)
                             print("dealer cards: ",hands['dealer_hand']['cards'],'dealer total: ',player_total('dealer_hand'))
 
                             while player_total('dealer_hand') < 17:
@@ -277,87 +245,23 @@ while one_more_round == 'yes':
                                 print('You lose!!!')
                                 break
 
-                            elif (not player_total('dealer_hand') > 21 and player_total(hand) > player_total('dealer_hand')) or (player_total('dealer_hand') > 21 and not 'ace' in hands['dealer_hand']['cards']) or (player_total('dealer_hand') > 21 and 'ace' in hands['dealer_hand']['cards'] and ace == 1):
+                            elif (not player_total('dealer_hand') > 21 and player_total(hand) > player_total('dealer_hand')) or (player_total('dealer_hand') > 21):
+                                print('your cards',hands[hand]['cards'] ,'Your total',player_total(hand))
                                 print('You won!!!')
                                 deposit = deposit + 2 * bet_amount
                                 break
 
-                            elif player_total('dealer_hand') > 21 and 'ace' in hands['dealer_hand']['cards'] and ace != 1:
-                                set_ace(1)
+                            elif player_total('dealer_hand') == 21:
+                                print('You lose!!!')
+                                break
 
-                                while player_total('dealer_hand') < 17:
-                                    gets_a_card('dealer_hand')
-                                    print("dealer cards: ",hands['dealer_hand']['cards'],"dealer_total",player_total('dealer_hand'))
-
-                                if not player_total('dealer_hand') > 21 and not player_total(hand) > player_total('dealer_hand'):
-                                    print('your cards',hands[hand]['cards'] ,'Your total',player_total(hand))
-                                    print('You lose!!!')
-                                    break
-
-                                elif (not player_total('dealer_hand') > 21 and player_total(hand) > player_total('dealer_hand')) or (player_total('dealer_hand') > 21 ):
-                                    print('your cards',hands[hand]['cards'] ,'Your total',player_total(hand))
-                                    print('You won!!!')
-                                    deposit = deposit + 2 * bet_amount
-                                    break
-
-                                elif player_total('dealer_hand') == 21:
-                                    print('You lose!!!')
-                                    break
+                            elif player_total('dealer_hand') == player_total(hand):
+                                print("Push")
+                                break
     
                     if player_total(hand) > 21 and not action == 'double':
-
-                        if 'ace' not in hands[hand]['cards'] or ('ace' in hands[hand]['cards'] and ace == 1):
-                            print("dealer cards: ",hands['dealer_hand']['cards'],'dealer total: ',player_total('dealer_hand'),'\n your cards:',hands[hand]['cards'],'and your total is',player_total(hand),' \n Bust \n You lose')
-
-                        else:
-                            
-                            set_ace(1)
-                            
-                            while not player_total(hand) >= 21:
-                                action = input("select one of the following option: \n \n hit \n stand \n \n ").strip().lower()
-
-                                if action == 'hit':
-                                    hits = hits + 1
-                                    gets_a_card(hand)
-
-                                    if player_total(hand) == 21:
-                                        print("dealer cards: ",hands['dealer_hand']['cards'],'dealer total: ',player_total('dealer_hand'),'\n You win')
-                                        deposit = deposit + 2 * bet_amount
-
-                                    elif player_total(hand) > 21:
-                                        print("dealer cards: ",hands['dealer_hand']['cards'],'dealer total: ',player_total('dealer_hand'),'\n your cards:',hands[hand]['cards'],'and your total is',player_total(hand),' \n Bust \n You lose')
-                                        break
-
-                                elif action == 'stand':
-                                    set_ace(11)
-                                    print("dealer cards: ",hands['dealer_hand']['cards'],'dealer total: ',player_total('dealer_hand'))
-
-                                    while player_total('dealer_hand') < 17:
-                                        gets_a_card('dealer_hand')
-
-                                    if not player_total('dealer_hand') > 21 and not player_total(hand) > player_total('dealer_hand'):
-                                        print('You lose!!!')
-                                        break
-
-                                    elif (not player_total('dealer_hand') > 21 and player_total(hand) > player_total('dealer_hand')) or (player_total('dealer_hand') > 21 and not 'ace' in hands['dealer_hand']['cards']) or (player_total('dealer_hand') > 21 and 'ace' in hands['dealer_hand']['cards'] and ace == 1):
-                                        print('You won!!!')
-                                        deposit = deposit + 2 * bet_amount
-                                        break
-
-                                    elif player_total('dealer_hand') > 21 and 'ace' in hands['dealer_hand']['cards'] and ace != 1:
-                                        set_ace(1)
-
-                                    while player_total('dealer_hand') < 17:
-                                        gets_a_card('dealer_hand')
-
-                                    if not player_total('dealer_hand') > 21 and not player_total(hand) > player_total('dealer_hand'):
-                                        print('You lose!!!')
-                                        break
-
-                                    elif (not player_total('dealer_hand') > 21 and player_total(hand) > player_total('dealer_hand')) or (player_total('dealer_hand') > 21 ):
-                                        print('You won!!!')
-                                        deposit = deposit + 2 * bet_amount
-                                        break
+                        print("dealer cards: ",hands['dealer_hand']['cards'],'dealer total: ',player_total('dealer_hand'),'\n your cards:',hands[hand]['cards'],'and your total is',player_total(hand),' \n Bust \n You lose')
+                        break
 
         print('Your deposit is', deposit, 'Rupees')
         update_user_deposit(username, deposit)
