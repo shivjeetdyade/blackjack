@@ -70,11 +70,13 @@ def blackjack_game():
         hands = {
             'dealer_hand':{
                 'cards':[],
-                'double':False
+                'double':False,
+                'bust':False
             },
             '1':{
                 'cards':[],
-                'double':False
+                'double':False,
+                'bust':False
             }
         }
 
@@ -216,15 +218,21 @@ def blackjack_game():
                                 break
 
                         if player_total(hand) > 21 and not action == 'double':
+                            hands[hand]['bust'] = True
                             continue
 
-                while player_total('dealer_hand') < 17:
+                if player_total('dealer_hand') < 17:
                     print("dealer cards: ",hands['dealer_hand']['cards'],"dealer_total",player_total('dealer_hand'))
-                    gets_a_card('dealer_hand')
-                    print("dealer cards: ",hands['dealer_hand']['cards'],"dealer_total",player_total('dealer_hand'))
+                    while player_total('dealer_hand') < 17:
+                        gets_a_card('dealer_hand')
+                        print("dealer cards: ",hands['dealer_hand']['cards'],"dealer_total",player_total('dealer_hand'))
 
                 for hand in hands:
-                    if not hand == 'dealer_hand' and hands[hand]['double'] == True:
+
+                    if hands[hand]['bust'] == True and not hand == 'dealer_hand':
+                        print("Bust. \n You lose!!!")
+
+                    elif not hand == 'dealer_hand' and hands[hand]['double'] == True:
                         print("comparing hand",hand,":",hands[hand]['cards'],"against dealer_hand",hands['dealer_hand']['cards'])
 
                         if player_total(hand) == 21:
@@ -234,7 +242,7 @@ def blackjack_game():
 
                         elif player_total(hand) > 21:
                             print("Bust. \n You lose!!!")
-                        
+
                         elif player_total(hand) < 21:
 
                             if player_total('dealer_hand') > 21:
