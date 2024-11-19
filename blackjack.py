@@ -36,7 +36,7 @@ def update_user_deposit(username, deposit):
     conn.close()
 
 def blackjack_game():
-    print(""" \n\n\n       ♠   ♥   ♣   ♦   BLACKJACK   ♦   ♣   ♥   ♠ """)
+    print(""" \n\n\n      ♠  ♥  ♣  ♦   BLACKJACK  ♦  ♣  ♥  ♠ """)
     print(r"""  
       ____  _            _     _            _    
      | __ )| | __ _  ___| | __(_) __ _  ___| | __
@@ -61,12 +61,275 @@ def blackjack_game():
         bet_amount = 0
         reps = 0
 
-        deck = ['ace','2','3','4','5','6','7','8','9','10','k','q','j']
-        # deck = ['ace']
+        arts = {
+                "A♥": """                         ┌───────┐ 
+                         │ A ♥   │ 
+                         │   ♥   │ 
+                         └───────┘ 
+                """,
+                "5♥": """                         ┌───────┐ 
+                         │ 5 ♥   │ 
+                         │   ♥   │ 
+                         └───────┘ 
+                """,
+                "9♥": """                         ┌───────┐ 
+                         │ 9 ♥   │ 
+                         │   ♥   │ 
+                         └───────┘ 
+                """,
+                "K♥": """                         ┌───────┐
+                         │ K ♥   │
+                         │   ♥   │
+                         └───────┘
+                """,
+                "2♥": """                         ┌───────┐ 
+                         │ 2 ♥   │ 
+                         │   ♥   │ 
+                         └───────┘ 
+                """,
+                "6♥": """                         ┌───────┐ 
+                         │ 6 ♥   │ 
+                         │   ♥   │ 
+                         └───────┘ 
+                """,
+                "10♥": """                          ┌───────┐ 
+                          │ 10 ♥  │ 
+                          │   ♥   │ 
+                          └───────┘ 
+                """,
+                "3♥": """                         ┌───────┐
+                         │ 3 ♥   │
+                         │   ♥   │
+                         └───────┘
+                """,
+                "7♥": """                         ┌───────┐
+                         │ 7 ♥   │
+                         │   ♥   │
+                         └───────┘
+                """,
+                "J♥": """                         ┌───────┐
+                         │ J ♥   │
+                         │   ♥   │
+                         └───────┘
+                """,
+                "4♥": """                         ┌───────┐
+                         │ 4 ♥   │
+                         │   ♥   │
+                         └───────┘
+                """,
+                "8♥": """                         ┌───────┐
+                         │ 8 ♥   │
+                         │   ♥   │
+                         └───────┘
+                """,
+                "Q♥": """                         ┌───────┐
+                         │ Q ♥   │
+                         │   ♥   │
+                         └───────┘
+                """,
+                "A♠": """                         ┌───────┐ 
+                         │ A ♠   │ 
+                         │   ♠   │ 
+                         └───────┘ 
+                """,
+                "5♠": """                         ┌───────┐ 
+                         │ 5 ♠   │ 
+                         │   ♠   │ 
+                         └───────┘ 
+                """,
+                "9♠": """                         ┌───────┐ 
+                         │ 9 ♠   │ 
+                         │   ♠   │ 
+                         └───────┘ 
+                """,
+                "K♠": """                         ┌───────┐
+                         │ K ♠   │
+                         │   ♠   │
+                         └───────┘
+                """,
+                "2♠": """                         ┌───────┐ 
+                         │ 2 ♠   │ 
+                         │   ♠   │ 
+                         └───────┘ 
+                """,
+                "6♠": """                         ┌───────┐ 
+                         │ 6 ♠   │ 
+                         │   ♠   │ 
+                         └───────┘ 
+                """,
+                "10♠": """                          ┌───────┐ 
+                          │ 10 ♠  │ 
+                          │   ♠   │ 
+                          └───────┘ 
+                """,
+                "3♠": """                         ┌───────┐
+                         │ 3 ♠   │
+                         │   ♠   │
+                         └───────┘
+                """,
+                "7♠": """                         ┌───────┐
+                         │ 7 ♠   │
+                         │   ♠   │
+                         └───────┘
+                """,
+                "J♠": """                         ┌───────┐
+                         │ J ♠   │
+                         │   ♠   │
+                         └───────┘
+                """,
+                "4♠": """                         ┌───────┐
+                         │ 4 ♠   │
+                         │   ♠   │
+                         └───────┘
+                """,
+                "8♠": """                         ┌───────┐
+                         │ 8 ♠   │
+                         │   ♠   │
+                         └───────┘
+                """,
+                "Q♠": """                         ┌───────┐
+                         │ Q ♠   │
+                         │   ♠   │
+                         └───────┘
+                """,
+                "A♣": """                         ┌───────┐ 
+                         │ A ♣   │ 
+                         │   ♣   │ 
+                         └───────┘ 
+                """,
+                "5♣": """                         ┌───────┐ 
+                         │ 5 ♣   │ 
+                         │   ♣   │ 
+                         └───────┘ 
+                """,
+                "9♣": """                         ┌───────┐ 
+                         │ 9 ♣   │ 
+                         │   ♣   │ 
+                         └───────┘ 
+                """,
+                "K♣": """                         ┌───────┐
+                         │ K ♣   │
+                         │   ♣   │
+                         └───────┘
+                """,
+                "2♣": """                         ┌───────┐ 
+                         │ 2 ♣   │ 
+                         │   ♣   │ 
+                         └───────┘ 
+                """,
+                "6♣": """                         ┌───────┐ 
+                         │ 6 ♣   │ 
+                         │   ♣   │ 
+                         └───────┘ 
+                """,
+                "10♣": """                          ┌───────┐ 
+                          │ 10 ♣  │ 
+                          │   ♣   │ 
+                          └───────┘ 
+                """,
+                "3♣": """                         ┌───────┐
+                         │ 3 ♣   │
+                         │   ♣   │
+                         └───────┘
+                """,
+                "7♣": """                         ┌───────┐
+                         │ 7 ♣   │
+                         │   ♣   │
+                         └───────┘
+                """,
+                "J♣": """                         ┌───────┐
+                         │ J ♣   │
+                         │   ♣   │
+                         └───────┘
+                """,
+                "4♣": """                         ┌───────┐
+                         │ 4 ♣   │
+                         │   ♣   │
+                         └───────┘
+                """,
+                "8♣": """                         ┌───────┐
+                         │ 8 ♣   │
+                         │   ♣   │
+                         └───────┘
+                """,
+                "Q♣": """                         ┌───────┐
+                         │ Q ♣   │
+                         │   ♣   │
+                         └───────┘
+                """,
+                "A♦": """                         ┌───────┐ 
+                         │ A ♦   │ 
+                         │   ♦   │ 
+                         └───────┘ 
+                """,
+                "5♦": """                         ┌───────┐ 
+                         │ 5 ♦   │ 
+                         │   ♦   │ 
+                         └───────┘ 
+                """,
+                "9♦": """                         ┌───────┐ 
+                         │ 9 ♦   │ 
+                         │   ♦   │ 
+                         └───────┘ 
+                """,
+                "K♦": """                         ┌───────┐
+                         │ K ♦   │
+                         │   ♦   │
+                         └───────┘
+                """,
+                "2♦": """                         ┌───────┐ 
+                         │ 2 ♦   │ 
+                         │   ♦   │ 
+                         └───────┘ 
+                """,
+                "6♦": """                         ┌───────┐ 
+                         │ 6 ♦   │ 
+                         │   ♦   │ 
+                         └───────┘ 
+                """,
+                "10♦": """                          ┌───────┐ 
+                          │ 10 ♦  │ 
+                          │   ♦   │ 
+                          └───────┘ 
+                """,
+                "3♦": """                         ┌───────┐
+                         │ 3 ♦   │
+                         │   ♦   │
+                         └───────┘
+                """,
+                "7♦": """                         ┌───────┐
+                         │ 7 ♦   │
+                         │   ♦   │
+                         └───────┘
+                """,
+                "J♦": """                         ┌───────┐
+                         │ J ♦   │
+                         │   ♦   │
+                         └───────┘
+                """,
+                "4♦": """                         ┌───────┐
+                         │ 4 ♦   │
+                         │   ♦   │
+                         └───────┘
+                """,
+                "8♦": """                         ┌───────┐
+                         │ 8 ♦   │
+                         │   ♦   │
+                         └───────┘
+                """,
+                "Q♦": """                         ┌───────┐
+                         │ Q ♦   │
+                         │   ♦   │
+                         └───────┘
+                """
+        }
 
-        card = {'ace':11,'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'10':10,'k':10,'q':10,'j':10}
-        # card = {'ace':11}
+        deck = ['A♦','A♣','A♥','A♠','2♦','2♥','2♠','2♣','3♦','3♥','3♠','3♣','4♦','4♥','4♠','4♣','5♦','5♥','5♠','5♣','6♦','6♥','6♠','6♣','7♦','7♥','7♠','7♣','8♦','8♥','8♠','8♣','9♦','9♥','9♠','9♣','10♦','10♥','10♠','10♣','K♦','K♥','K♠','K♣','Q♦','Q♥','Q♠','Q♣','J♦','J♥','J♠','J♣']
+        # deck = ['10♦','10♥','10♠','10♣']
 
+        card = {'A♦':11,'A♣':11,'A♥':11,'A♠':11,'2♦':2,'2♥':2,'2♠':2,'2♣':2,'3♦':3,'3♥':3,'3♠':3,'3♣':3,'4♦':4,'4♥':4,'4♠':4,'4♣':4,'5♦':5,'5♥':5,'5♠':5,'5♣':5,'6♦':6,'6♥':6,'6♠':6,'6♣':6,'7♦':7,'7♥':7,'7♠':7,'7♣':7,'8♦':8,'8♥':8,'8♠':8,'8♣':8,'9♦':9,'9♥':9,'9♠':9,'9♣':9,'10♦':10,'10♥':10,'10♠':10,'10♣':10,'K♦':10,'K♥':10,'K♠':10,'K♣':10,'Q♦':10,'Q♥':10,'Q♠':10,'Q♣':10,'J♦':10,'J♥':10,'J♠':10,'J♣':10}
+        # card = {'10♦':10,'10♣':10,'10♥':10,'10♠':10}
+        
         hands = {
             'dealer_hand':{
                 'cards':[],
@@ -81,10 +344,13 @@ def blackjack_game():
         }
 
         def gets_a_card(player_hand):
-            hands[player_hand]['cards'].append(deck[randint(0,len(deck)-1)])
+            hands[player_hand]['cards'].append(deck.pop(randint(0,len(deck)-1)))
 
         def set_ace(ace_value):
-            card['ace'] = ace_value
+            card['A♦'] = ace_value
+            card['A♠'] = ace_value
+            card['A♥'] = ace_value
+            card['A♣'] = ace_value
 
         def cards_match():
             for hand in hands:
@@ -141,17 +407,33 @@ def blackjack_game():
             gets_a_card('1')
 
             user_total = player_total('1')
+            print(arts[hands['dealer_hand']['cards'][0]])
             print("dealer cards: ",hands['dealer_hand']['cards'][0],'and Hidden card'," , dealer total: ",card[hands['dealer_hand']['cards'][0]],'+ Hidden')
-            print("your cards:  ",hands['1']['cards'],', your total:    ',user_total)
+            for j in hands['1']['cards']:
+                print(arts[j])
+            # print(list(arts[i] for i in hands['1']['cards']))
+            print("your cards:  ",*hands['1']['cards'],', your total:    ',user_total)
 
             if player_total('dealer_hand') == 21 and user_total == 21:
-                print("You have a BlackJack. \n with cards", hands['dealer_hand']['cards'] ,"Dealer has a blackjack. \n You lose!!!")
+
+                for j in hands['dealer_hand']['cards']:
+                    print(arts[j])
+                
+                print("You have a BlackJack. \n with cards", *hands['dealer_hand']['cards'] ,"Dealer has a blackjack. \n You lose!!!")
 
             elif player_total('dealer_hand') == 21: 
-                print("with cards", hands['dealer_hand']['cards'] ,"Dealer has a blackjack \n you lose!!!")
+
+                for j in hands['dealer_hand']['cards']:
+                    print(arts[j])
+
+                print("with cards", *hands['dealer_hand']['cards'] ,"Dealer has a blackjack \n you lose!!!")
 
             elif user_total == 21: 
-                print("dealer cards: ",hands['dealer_hand']['cards'],'dealer total: ',player_total('dealer_hand'))
+                print("dealer cards: ",*hands['dealer_hand']['cards'],'dealer total: ',player_total('dealer_hand'))
+                
+                for j in hands['dealer_hand']['cards']:
+                    print(arts[j])
+                
                 print("You have blackjack. \n You win")
                 deposit = deposit + 7/3 * bet_amount
 
@@ -194,7 +476,10 @@ def blackjack_game():
                             if action == 'hit':
                                 hits = hits + 1
                                 gets_a_card(hand)
-                                print('your cards',hands[hand]['cards'] ,'Your total',player_total(hand))
+                                print('your cards',*hands[hand]['cards'] ,'Your total',player_total(hand))
+
+                                for j in hands[hand]['cards']:
+                                    print(arts[j])
 
                                 if player_total(hand) == 21: 
                                     break
@@ -205,7 +490,10 @@ def blackjack_game():
                                 deposit = deposit - bet_amount
                                 print("your deposit is",deposit)
                                 gets_a_card(hand)
-                                print('your cards',hands[hand]['cards'] ,'Your total',player_total(hand))
+                                print('your cards',*hands[hand]['cards'] ,'Your total',player_total(hand))
+                                
+                                for j in hands[hand]['cards']:
+                                    print(arts[j])
 
                                 if player_total(hand) == 21:
                                     break
@@ -222,10 +510,17 @@ def blackjack_game():
                             continue
 
                 if player_total('dealer_hand') < 17:
-                    print("dealer cards: ",hands['dealer_hand']['cards'],"dealer_total",player_total('dealer_hand'))
+                    print("dealer cards: ",*hands['dealer_hand']['cards'],"dealer_total",player_total('dealer_hand'))
+
+                    for j in hands['dealer_hand']['cards']:
+                        print(arts[j])
+
                     while player_total('dealer_hand') < 17:
                         gets_a_card('dealer_hand')
-                        print("dealer cards: ",hands['dealer_hand']['cards'],"dealer_total",player_total('dealer_hand'))
+                        print("dealer cards: ",*hands['dealer_hand']['cards'],"dealer_total",player_total('dealer_hand'))
+                        
+                        for j in hands['dealer_hand']['cards']:
+                            print(arts[j])
 
                 for hand in hands:
 
@@ -233,7 +528,13 @@ def blackjack_game():
                         print("Bust. \n You lose!!!")
 
                     elif not hand == 'dealer_hand' and hands[hand]['double'] == True:
-                        print("comparing hand",hand,":",hands[hand]['cards'],"against dealer_hand",hands['dealer_hand']['cards'])
+                        print("comparing hand",hand,":",*hands[hand]['cards'],"against dealer_hand",*hands['dealer_hand']['cards'])
+
+                        for i in hands[hand]['cards']:
+                            print(arts[i])
+                        
+                        for j in hands['dealer_hand']['cards']:
+                            print(arts[j])
 
                         if player_total(hand) == 21:
                             deposit = deposit + 4 * bet_amount
@@ -264,8 +565,14 @@ def blackjack_game():
                                 deposit = deposit + 2 * bet_amount
 
                     elif not hand == 'dealer_hand' and not hands[hand]['double'] == True:
-                        print("comparing hand",hand,":",hands[hand]['cards'],"against dealer_hand",hands['dealer_hand']['cards'])
-
+                        print("comparing hand",hand,":",*hands[hand]['cards'],"against dealer_hand",*hands['dealer_hand']['cards'])
+                        
+                        for i in hands[hand]['cards']:
+                            print(arts[i])
+                        
+                        for j in hands['dealer_hand']['cards']:
+                            print(arts[j])
+                        
                         if player_total(hand) == 21:
                             deposit = deposit + 2 * bet_amount
                             print("You have blackjack. \n You win")
