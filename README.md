@@ -1,13 +1,36 @@
-# BlackJack
+# 🃏 BlackJack
 
-This is a simple project based on the game Blackjack.
+A simple command-line Blackjack game, designed for fun and practice!
 
-To understand the game better, you can play the actual game [here](https://games.washingtonpost.com/games/blackjack) or you can leran [here](https://youtu.be/PljDuynF-j0) 
+You can learn or play the real game here:
+- ▶️ [Watch this quick tutorial](https://youtu.be/PljDuynF-j0)
+- 🎮 [Try the game online](https://games.washingtonpost.com/games/blackjack)
 
-#how to run/use this code?
-1.  Download blckjack.exe file (windows only)  OR Download blackjack.py file if you have python installed.
-2.  Double click the downloaded file and Enjoy your game.
+---
 
-Remember: You may forget your balance, the game doesn't. whenever you open the game, Enter your name and continue with the last balance coins you had.
+## 🚀 How to Run the Game
 
-Any suggestions are welcome. write to me >> shivjeetdyade@gmail.com
+### Option 1: Run the Executable (Windows Only)
+1. Download `blackjack.exe`.
+2. Double-click the file to launch the game — no setup required!
+
+### Option 2: Run with Python
+1. Make sure you have Python installed.
+2. Download `blackjack.py`.
+3. Run it via terminal or double-click (depending on your OS setup).
+
+---
+
+## 💾 Game Feature: Persistent Balance
+
+The game remembers your balance across sessions.  
+Just enter the **same name** every time you play, and you'll continue with the coins you had last.
+
+---
+
+## 📬 Feedback & Suggestions
+
+Have ideas or found an issue?  
+Feel free to email me at **shivjeetdyade@gmail.com** — I’d love to hear from you!
+
+---
